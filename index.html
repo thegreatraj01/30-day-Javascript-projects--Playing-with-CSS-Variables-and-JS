@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Playing with CSS Variables and JS</title>
+</head>
+
+<body>
+    <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+    <div class="controls">
+        <label for="spacing">Spacing:</label>
+        <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+        <label for="blur">Blur:</label>
+        <input id="blur" type="range" name="blur" min="0" max="25" value="1" data-sizing="px">
+
+        <label for="base">Base Color</label>
+        <input id="base" type="color" name="base" value="#ffc600">
+
+        <!-- Input for file upload -->
+        <div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <button id="uploadButton">Change Image</button>
+        </div>
+        <!-- <button id="downloadButton">Download Image</button> -->
+
+    </div>
+
+    <img
+        src="https://img.freepik.com/free-photo/pattern-with-watercolor-flowers-vintage_1268-29266.jpg?t=st=1710055514~exp=1710059114~hmac=f9fa21fe5c7ec97574a1d570f5b9ca1795ad74d20a33f71b8ebd9ddccd51e980&w=1060">
+
+    <script>
+        const input = document.querySelectorAll('.controls input');
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const image = document.querySelector('img');
+
+        function handleupdate() {
+            const suffix = this.dataset.sizing || '';
+            document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        input.forEach(input => input.addEventListener('change', handleupdate));
+        input.forEach(input => input.addEventListener('mousemove', handleupdate));
+
+        uploadButton.addEventListener('click', function () {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', handleFileUpload);
+
+     
+    </script>
+
+</body>
+
+</html>
